@@ -1,8 +1,19 @@
 import React, { Component } from "react";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+      this.state = { 
 
-  
+      }   
+  this.handleBtnClick = this.handleBtnClick.bind(this);
+    }
+
+  handleBtnClick(e) {
+    e.preventDefault();
+    console.log("Button clicked on " + new Date().toISOString());
+  };
+
   render() {
     return (
       <div className="container">
@@ -24,17 +35,15 @@ class App extends Component {
               </select>
             </div>
             <div className="card-footer">
-              <button className="btn btn-success btn-block create-todo"> Add </button>
+              <button className="btn btn-success btn-block create-todo" onClick={this.handleBtnClick}> Add </button>
             </div>
           </div>
           <div className="col-8 mt-3">
             <div className="card">
               <p className="card-header h6">View Todos</p>
               <div className="card-block no-padding pull-right">
-                <div className="alert alert-info no-margin">
-                  <strong>Welcome to Very Simple Todo App!</strong>
-                  <br />
-                  Get started now by adding a new todo on the left.
+                <div id='todoList' className="alert alert-info no-margin">
+                  
                 </div>
               </div>
             </div>
