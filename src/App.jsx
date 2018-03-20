@@ -12,7 +12,15 @@ class App extends Component {
   handleBtnClick(e) {
     e.preventDefault();
     console.log("Button clicked on " + new Date().toISOString());
-  };
+    var li = document.createElement("li");
+    var inputValue = document.getElementById("myInput").value;
+    var foo = document.createTextNode(inputValue);
+    li.appendChild(foo);
+  if (inputValue === '') {
+    alert("You must write something todo!");
+  } else {
+    document.getElementById("todoList").appendChild(li);
+  }};
 
   render() {
     return (
@@ -26,9 +34,9 @@ class App extends Component {
             <div className="card-header h6"> Add New Todo </div>
             <div>
               <strong>I want to..</strong> <br />
-              <textarea className='create-todo-text' /> <br />
+              <textarea id='myInput' className='create-todo-text' /> <br />
               <strong>How much of a priority is this?</strong> <br />
-              <select className='create-todo-priority'>
+              <select id='priority'className='create-todo-priority btn-block' placeholder='Select a Priority' value={ this.state.priority } >
                 <option value="3"> High Priority </option>
                 <option value="2"> Medium Priority </option>
                 <option value="1"> Low Priority </option>
@@ -42,9 +50,9 @@ class App extends Component {
             <div className="card">
               <p className="card-header h6">View Todos</p>
               <div className="card-block no-padding pull-right">
-                <div id='todoList' className="alert alert-info no-margin">
+                <ul id='todoList' className="alert alert-info no-margin">                  
                   
-                </div>
+                </ul>
               </div>
             </div>
           </div>
