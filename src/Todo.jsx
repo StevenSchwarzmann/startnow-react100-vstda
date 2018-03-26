@@ -5,17 +5,16 @@ export class Todo extends Component {
     super(props);
 
     this.state = {
-        isEditing: false
+        isEditing: false,
+        todo: props.todo
     };
 
     this.handleChangePriority = this.handleChangePriority.bind(this);
     this.handleChangeText = this.handleChangeText.bind(this);
     this.handleEditClick = this.handleEditClick.bind(this);
     this.updateEdit = this.updateEdit.bind(this);
-  
+    this.deleteEdit = this.deleteEdit.bind(this);
   }
-
-
 
   
   //Change todo to edit screen
@@ -25,24 +24,42 @@ export class Todo extends Component {
 
   //Change priority of current single todo
   handleChangePriority(e) {
-    this.setState({ priority: e.target.value });
+    //this.setState({ priority: e.target.value });
+    //let todo = { text: this.state.todo.text, priority: e.target.value};
+    let todo = Object.assign({}, this.state.todo, { priority: e.target.value});
+    this.setState({ todo });
   }
 
   //Change text of current single todo
   handleChangeText(e) {
-    this.setState({ text: e.target.value });
+    //this.setState({ text: e.target.value });
+    //let todo = { text: e.target.value, priority: this.state.todo.priority };
+    let todo = Object.assign({}, this.state.todo, { text: e.target.value});
+    
+    this.setState({ todo });
   }
 
   //Send Todo.state.text to App.updateSingleTodo(Todo.state.text)
-  updateEdit(e) {
+  // updateEdit(e) {
 
-      //Lifting state up
-      this.props.updateSingle(this.state.text);
+  //     //Lifting state up
+  //     this.props.updateSingle(this.state.text);
       
-      //Set the state of Todo back to isEditing false
-      this.setState({isEditing: false});
-  }
+  //     //Set the state of Todo back to isEditing false
+  //     this.setState({isEditing: false});
+  // }
+  updateEdit(e) {
+    //Lifting state up
+    this.props.onUpdate(this.state.todo);
+    
+    //Set the state of Todo back to isEditing false
+    this.setState({isEditing: false});
+}
 
+deleteEdit(e) {
+  this.props.deleteEdit(this.state.todo);
+
+}
 
   render() {
 
@@ -69,7 +86,7 @@ export class Todo extends Component {
         <strong> Description </strong>
         <textarea
           className="update-todo-text"
-          defaultValue={this.props.todo.text}
+          defaultValue={this.state.todo.text}
           onChange={this.handleChangeText}
         />
       <div><strong> Priority </strong></div>
@@ -78,7 +95,7 @@ export class Todo extends Component {
         id="priority"
         className="update-todo-priority btn-block"
         placeholder="Select a Priority"
-        defaultValue={this.props.todo.priority}
+        defaultValue={this.state.todo.priority}
         onChange={this.handleChangePriority}
       >
         <option value="null">Select a Priority</option>
@@ -98,13 +115,13 @@ export class Todo extends Component {
               <button
                 type="button"
                 className="float-right"
-                onClick={this.handleDeleteClick}
+                onClick={this.deleteEdit}
               >
                 <span className="glyphicon glyphicon-trash" />
               </button>
               <button
                 type="button"
-                className="float-right"
+                className="float-right edit-todo"
                 onClick={this.handleEditClick}
               >
                 <span className="glyphicon glyphicon-edit" />

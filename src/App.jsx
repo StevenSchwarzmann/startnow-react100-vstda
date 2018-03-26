@@ -11,35 +11,58 @@ class App extends Component {
     };
     this.handleBtnClick = this.handleBtnClick.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.updateSingleTodo = this.updateSingleTodo.bind(this);
+    this.onUpdate = this.onUpdate.bind(this);
+    this.deleteTodo = this.deleteTodo.bind(this);
   }
 
+  //Handles add button and pushes new entry to array of todos
   handleBtnClick(e) {
     if (this.state.priority === "null" || this.state.text === "") {
       alert("Please enter a valid priority and task todo");
     } else {
       var newTodo = {
+        id: Date.now(),
         text: this.state.text,
         priority: this.state.priority
       };
 
       var allTodos = [...this.state.todos];
       allTodos.push(newTodo);
-
+      //resets inputs to defaults
       this.setState({ todos: allTodos, text: '', priority: "null" });
     }
   }
 
-  updateSingleTodo(textFromSingleTodo) {
+  onUpdate(todo) {
+    let todos = this.state.todos;
+    //var index = this.state.todos.indexOf(todo);
+    var index = todos.findIndex(t => t.id === todo.id);
+    console.log("Found todo at index ", index);
+    console.log("Parameter todo is ", todo);
+    //breaks todos in three parts - before the edit, the edit, and after the edit
+    let updatedTodo = Object.assign({}, todos[index], todo);
+    let frontTodos = todos.slice(0, index);
+    let backTodos = todos.slice(index + 1);
+    //remakes list of todos with the edit(updated) todo in place of original
+    this.setState( {
+      todos: [...frontTodos, updatedTodo, ...backTodos]
+    });
 
-    //actually update that todo
-    var allTodos = [...this.state.todos];
+    console.log("All todos after update", this.state.todos); 
+  }
 
-    //test to make sure we can update the first todos text from the single component
-    allTodos[0].text = textFromSingleTodo;
-
-   //update App.state.todos to newTodos 
-    this.setState({ todos: allTodos });
+  deleteTodo(todo) {
+    let todos = this.state.todos;
+    var index = todos.findIndex(t => t.id === todo.id);
+    console.log("delete button pressed")
+    //let deletedTodo = Object.assign({}, todos[index], todo);
+    todos.splice(index, 1);
+    // let backTodos = todos.splice(index + 1);
+    //remakes list of todos with the sliced todo instead of original
+    console.log(index)
+    this.setState( {
+      todos
+    });
   }
 
   handleChange(e) {
@@ -72,7 +95,7 @@ class App extends Component {
               <select
                 name="priority"
                 id="priority"
-                className="create-todo-priority btn-block"
+                className="create-todo-priority btn-block "
                 placeholder="Select a Priority"
                 value={this.state.priority}
                 onChange={this.handleChange}
@@ -88,17 +111,19 @@ class App extends Component {
                 className="btn btn-success btn-block create-todo"
                 onClick={this.handleBtnClick}
               >
-                {" "}
-                Add{" "}
+                Add
               </button>
             </div>
           </div>
-          <div className="col-8 mt-3">
+          <div className="col-8 mt-3">  
             <div className="card">
               <p className="card-header h6">View Todos</p>
               <div className="card-block no-padding pull-right">
                 <span>
-                  <TodoList updateTodo={this.updateSingleTodo} todos={this.state.todos} />
+                  <TodoList 
+                    deleteEdit={this.deleteTodo} 
+                    onUpdate={this.onUpdate}
+                    todos={this.state.todos} />
                 </span>
               </div>
             </div>
