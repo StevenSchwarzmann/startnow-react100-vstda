@@ -13,6 +13,7 @@ class App extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.onUpdate = this.onUpdate.bind(this);
     this.deleteTodo = this.deleteTodo.bind(this);
+    this.checkTodo = this.checkTodo.bind(this);
   }
 
   //Handles add button and pushes new entry to array of todos
@@ -23,7 +24,8 @@ class App extends Component {
       var newTodo = {
         id: Date.now(),
         text: this.state.text,
-        priority: this.state.priority
+        priority: this.state.priority,
+        completed: false
       };
 
       var allTodos = [...this.state.todos];
@@ -52,7 +54,7 @@ class App extends Component {
   }
 
   deleteTodo(todo) {
-    let todos = this.state.todos;
+    let todos = [...this.state.todos];
     var index = todos.findIndex(t => t.id === todo.id);
     console.log("delete button pressed")
     //let deletedTodo = Object.assign({}, todos[index], todo);
@@ -69,6 +71,20 @@ class App extends Component {
     const value = e.target.value;
     const name = e.target.name;
     this.setState({ [name]: value });
+  }
+
+  checkTodo(todo) {
+    let todos = [...this.state.todos];
+    var index = todos.findIndex(t => t.id === todo.id);
+    console.log("done button pressed")
+    //let deletedTodo = Object.assign({}, todos[index], todo);
+    todos[index].completed = true;
+    // let backTodos = todos.splice(index + 1);
+    //remakes list of todos with the sliced todo instead of original
+    console.log(index)
+    this.setState( {
+      todos
+    });
   }
 
   render() {
@@ -123,7 +139,8 @@ class App extends Component {
                   <TodoList 
                     deleteEdit={this.deleteTodo} 
                     onUpdate={this.onUpdate}
-                    todos={this.state.todos} />
+                    todos={this.state.todos}
+                    check={this.checkTodo} />
                 </span>
               </div>
             </div>

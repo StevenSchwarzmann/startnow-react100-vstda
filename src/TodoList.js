@@ -18,7 +18,7 @@ export class TodoList extends Component {
       <div>
          {TodoListTodos.map((singleTodo, index) => 
             <Todo key={index} deleteEdit={this.props.deleteEdit} 
-              onUpdate={this.props.onUpdate} todo={singleTodo}/>)}
+              onUpdate={this.props.onUpdate} todo={singleTodo} check={this.props.check}/>)}
       </div>
      );
   }

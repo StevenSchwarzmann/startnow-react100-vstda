@@ -14,9 +14,8 @@ export class Todo extends Component {
     this.handleEditClick = this.handleEditClick.bind(this);
     this.updateEdit = this.updateEdit.bind(this);
     this.deleteEdit = this.deleteEdit.bind(this);
+    this.check = this.check.bind(this);
   }
-
-  
   //Change todo to edit screen
   handleEditClick(e) {
     this.setState({ isEditing: true });
@@ -54,6 +53,10 @@ export class Todo extends Component {
     
     //Set the state of Todo back to isEditing false
     this.setState({isEditing: false});
+}
+
+check(e) {
+  this.props.check(this.state.todo);
 }
 
 deleteEdit(e) {
@@ -110,7 +113,8 @@ deleteEdit(e) {
     //If normal and not editing
     else {
           return (
-            <div className={cssClassName}>
+            <div className={cssClassName} style={this.props.todo.completed ? {textDecoration:'line-through'} : null }>
+              <input type="checkbox" onChange={this.check} checked={this.props.todo.completed ? 'checked': false }/>
               {this.props.todo.text}
               <button
                 type="button"
